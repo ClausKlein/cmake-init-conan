@@ -16,6 +16,12 @@
       }
     },
     {
+      "name": "dev-coverage",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/coverage",
+      "inherits": ["coverage-unix", "dev-common"]
+    },
+    {
       "name": "dev-linux",
       "binaryDir": "${sourceDir}/build/dev-linux",
       "inherits": ["dev-common", "ci-linux"],
@@ -44,13 +50,8 @@
     },
     {
       "name": "dev",
-      "binaryDir": "${sourceDir}/build/dev",
-      "inherits": "dev-linux"
-    },
-    {
-      "name": "dev-coverage",
-      "binaryDir": "${sourceDir}/build/coverage",
-      "inherits": ["dev-mode", "coverage-linux", "conan"]
+      "displayName": "Ninja developer build with coverage",
+      "inherits": "dev-coverage"
     }
   ],
   "buildPresets": [
@@ -69,7 +70,7 @@
       "name": "check",
       "configurePreset": "dev",
       "configuration": "Debug",
-      "targets": ["test", "install", "spell-check"]
+      "targets": ["test", "run-exe", "install", "spell-check"]
     }
   ],
   "testPresets": [
