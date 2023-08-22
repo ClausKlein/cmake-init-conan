@@ -21,7 +21,11 @@ Developer mode is always set to on in CI workflows.
 This project makes use of [presets][1] to simplify the process of configuring
 the project. As a developer, you are recommended to always have the [latest
 CMake version][2] installed to make use of the latest Quality-of-Life
-additions.
+additions:
+
+```sh
+pip install cmake ninja
+```
 
 You have a few options to pass `mytest_DEVELOPER_MODE` to the configure
 command, but this project prefers to use presets.
@@ -72,9 +76,15 @@ the operating system you have, which may be `win64`, `linux` or `darwin`. You
 can see what these correspond to in the
 [`CMakePresets.json`](CMakePresets.json) file.
 
-[`CMakePresets.json`](.CMakePresets.json) is also the perfect place in which
-you can put all sorts of things that you would otherwise want to pass to the
-configure command in the terminal.
+An **CMake workflow preset** is prepared ready to use on Linux.
+
+```sh
+ln -s .CMakeUserPresets.json CMakeUserPresets.json
+```
+
+[`.CMakeUserPresets.json`](.CMakeUserPresets.json) is also the perfect place in
+which you can put all sorts of things that you would otherwise want to pass to
+the configure command in the terminal.
 
 > **Note**
 > Some editors are pretty greedy with how they open projects with presets.
@@ -112,6 +122,7 @@ the project respectively with the following commands from the project root on
 any operating system with any build system:
 
 ```sh
+cmake --list-presets
 cmake --workflow --preset=dev --fresh
 
 # which does the following steps:

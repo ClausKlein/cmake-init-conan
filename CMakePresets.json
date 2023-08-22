@@ -143,15 +143,30 @@
     },
     {
       "name": "ci-macos",
-      "inherits": ["ci-build", "ci-darwin", "dev-mode", "conan"]
+      "inherits": ["ci-build", "ci-darwin", "dev-mode", "conan"],
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Darwin"
+      }
     },
     {
       "name": "ci-ubuntu",
-      "inherits": ["ci-build", "ci-linux", "clang-tidy", "dev-mode", "conan"]
+      "inherits": ["ci-build", "ci-linux", "clang-tidy", "dev-mode", "conan"],
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Linux"
+      }
     },
     {
       "name": "ci-windows",
-      "inherits": ["ci-build", "ci-win64", "dev-mode", "conan"]
+      "inherits": ["ci-build", "ci-win64", "dev-mode", "conan"],
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Windows"
+      }
     }
   ]
 }
