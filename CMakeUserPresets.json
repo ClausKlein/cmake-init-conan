@@ -22,36 +22,51 @@
       "inherits": ["coverage-unix", "dev-common"]
     },
     {
-      "name": "dev-linux",
+      "name": "dev-Linux",
       "binaryDir": "${sourceDir}/build/dev-linux",
       "inherits": ["dev-common", "ci-linux"],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      },
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Linux"
       }
     },
     {
-      "name": "dev-darwin",
+      "name": "dev-Darwin",
       "binaryDir": "${sourceDir}/build/dev-darwin",
       "inherits": ["dev-common", "ci-darwin"],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      },
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Darwin"
       }
     },
     {
-      "name": "dev-win64",
+      "name": "dev-Windows",
       "binaryDir": "${sourceDir}/build/dev-win64",
       "inherits": ["dev-common", "ci-win64"],
       "environment": {
         "UseMultiToolTask": "true",
         "EnforceProcessCountAcrossBuilds": "true"
+      },
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Windows"
       }
     },
     {
       "name": "dev",
-      "displayName": "Ninja developer build with coverage",
-      "inherits": "dev-coverage"
+      "displayName": "Ninja developer build with coverage for ${hostSystemName}",
+      "inherits": ["dev-coverage", "dev-Linux"]
     }
   ],
   "buildPresets": [
