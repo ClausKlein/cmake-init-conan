@@ -72,9 +72,9 @@ the operating system you have, which may be `win64`, `linux` or `darwin`. You
 can see what these correspond to in the
 [`CMakePresets.json`](CMakePresets.json) file.
 
-`CMakeUserPresets.json` is also the perfect place in which you can put all
-sorts of things that you would otherwise want to pass to the configure command
-in the terminal.
+[`CMakePresets.json`](.CMakePresets.json) is also the perfect place in which
+you can put all sorts of things that you would otherwise want to pass to the
+configure command in the terminal.
 
 > **Note**
 > Some editors are pretty greedy with how they open projects with presets.
@@ -112,6 +112,9 @@ the project respectively with the following commands from the project root on
 any operating system with any build system:
 
 ```sh
+cmake --workflow --preset=dev --fresh
+
+# which does the following steps:
 cmake --preset=dev
 cmake --build --preset=dev
 ctest --preset=dev
