@@ -1,4 +1,8 @@
-set(SPELL_COMMAND codespell CACHE STRING "Spell checker to use")
+find_program(SPELL_COMMAND codespell)
+if(NOT SPELL_COMMAND)
+    message(WARNING "$(SPELL_COMMAND) requested but executable not found")
+    set(SPELL_COMMAND echo CACHE STRING "Spell checker to use not found" FORCE)
+endif()
 
 add_custom_target(
     spell-check
