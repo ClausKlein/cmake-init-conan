@@ -66,7 +66,7 @@
     {
       "name": "dev",
       "displayName": "Ninja developer build with coverage for ${hostSystemName}",
-      "inherits": ["dev-coverage", "dev-Darwin"]
+      "inherits": ["dev-coverage", "dev-Linux"]
     }
   ],
   "buildPresets": [

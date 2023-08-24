@@ -1,6 +1,5 @@
 [codespell]
 builtin = clear,rare,en-GB_to_en-US,names,informal,code
-check-filenames =
 check-hidden =
-skip = */.git,*/build,*/prefix,*/conan
+skip = .git,build/*,prefix/*,conan/*,stagedir/*,*.log,.*.swp,*~,*.bak
 quiet-level = 2
