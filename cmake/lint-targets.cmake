@@ -7,7 +7,11 @@ set(
     "; separated patterns relative to the project source dir to format"
 )
 
-set(FORMAT_COMMAND clang-format CACHE STRING "Formatter to use")
+find_program(FORMAT_COMMAND clang-format)
+if(NOT FORMAT_COMMAND)
+    message(WARNING "${FORMAT_COMMAND} requested but executable not found")
+    set(FORMAT_COMMAND echo CACHE STRING "Formatter to use not found" FORCE)
+endif()
 
 add_custom_target(
     format-check

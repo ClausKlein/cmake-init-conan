@@ -1,10 +1,5 @@
 {
-  "version": 2,
-  "cmakeMinimumRequired": {
-    "major": 3,
-    "minor": 14,
-    "patch": 0
-  },
+  "version": 6,
   "configurePresets": [
     {
       "name": "cmake-pedantic",
@@ -112,14 +107,13 @@
       "hidden": true
     },
     {
-      "name": "coverage-linux",
+      "name": "coverage-unix",
       "binaryDir": "${sourceDir}/build/coverage",
-      "inherits": "ci-linux",
       "hidden": true,
       "cacheVariables": {
         "ENABLE_COVERAGE": "ON",
         "CMAKE_BUILD_TYPE": "Coverage",
-        "CMAKE_CXX_FLAGS_COVERAGE": "-Og -g --coverage -fkeep-inline-functions -fkeep-static-functions",
+        "CMAKE_CXX_FLAGS_COVERAGE": "-Og -g --coverage",
         "CMAKE_EXE_LINKER_FLAGS_COVERAGE": "--coverage",
         "CMAKE_SHARED_LINKER_FLAGS_COVERAGE": "--coverage",
         "CMAKE_MAP_IMPORTED_CONFIG_COVERAGE": "Coverage;RelWithDebInfo;Release;Debug;"
@@ -127,9 +121,14 @@
     },
     {
       "name": "ci-coverage",
-      "inherits": ["coverage-linux", "dev-mode", "conan"],
+      "inherits": ["coverage-unix", "ci-linux", "dev-mode", "conan"],
       "cacheVariables": {
         "COVERAGE_HTML_COMMAND": ""
+      },
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Linux"
       }
     },
     {
@@ -140,6 +139,11 @@
         "CMAKE_BUILD_TYPE": "Sanitize",
         "CMAKE_CXX_FLAGS_SANITIZE": "-O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-common",
         "CMAKE_MAP_IMPORTED_CONFIG_SANITIZE": "Sanitize;RelWithDebInfo;Release;Debug;"
+      },
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Linux"
       }
     },
     {
@@ -149,15 +153,30 @@
     },
     {
       "name": "ci-macos",
-      "inherits": ["ci-build", "ci-darwin", "dev-mode", "conan"]
+      "inherits": ["ci-build", "ci-darwin", "dev-mode", "conan"],
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Darwin"
+      }
     },
     {
       "name": "ci-ubuntu",
-      "inherits": ["ci-build", "ci-linux", "clang-tidy", "conan", "cppcheck", "dev-mode"]
+      "inherits": ["ci-build", "ci-linux", "clang-tidy", "dev-mode", "conan"],
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Linux"
+      }
     },
     {
       "name": "ci-windows",
-      "inherits": ["ci-build", "ci-win64", "dev-mode", "conan"]
+      "inherits": ["ci-build", "ci-win64", "dev-mode", "conan"],
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Windows"
+      }
     }
   ]
 }

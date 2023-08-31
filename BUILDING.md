@@ -4,6 +4,12 @@
 
 For a list of dependencies, please refer to [conanfile.py](conanfile.py).
 
+To prepare the build, you have to install them:
+
+```sh
+conan install . -s build_type=Release -b missing
+``
+
 ## Build
 
 This project doesn't require any special command-line flags to build to keep

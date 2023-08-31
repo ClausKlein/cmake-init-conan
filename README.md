@@ -8,7 +8,9 @@ See the [BUILDING](BUILDING.md) document.
 
 # Contributing
 
-See the [CONTRIBUTING](CONTRIBUTING.md) document.
+See the [CONTRIBUTING](CONTRIBUTING.md) document,
+
+and the [HACKING](HACKING.md) document.
 
 # Licensing
 

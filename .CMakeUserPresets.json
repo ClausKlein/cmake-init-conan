@@ -1,0 +1,128 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "dev-common",
+      "hidden": true,
+      "inherits": ["dev-mode", "conan"],
+      "generator": "Ninja",
+      "installDir": "${sourceDir}/stagedir",
+      "cacheVariables": {
+        "BUILD_MCSS_DOCS": "OFF",
+        "CMAKE_PREFIX_PATH": {
+          "type": "path",
+          "value": "${sourceDir}/stagedir"
+        }
+      }
+    },
+    {
+      "name": "dev-coverage",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/coverage",
+      "inherits": ["coverage-unix", "dev-common"]
+    },
+    {
+      "name": "dev-Linux",
+      "binaryDir": "${sourceDir}/build/dev-linux",
+      "inherits": ["dev-common", "ci-linux"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      },
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Linux"
+      }
+    },
+    {
+      "name": "dev-Darwin",
+      "binaryDir": "${sourceDir}/build/dev-darwin",
+      "inherits": ["dev-common", "ci-darwin"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      },
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Darwin"
+      }
+    },
+    {
+      "name": "dev-Windows",
+      "binaryDir": "${sourceDir}/build/dev-win64",
+      "inherits": ["dev-common", "ci-win64"],
+      "environment": {
+        "UseMultiToolTask": "true",
+        "EnforceProcessCountAcrossBuilds": "true"
+      },
+      "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Windows"
+      }
+    },
+    {
+      "name": "dev",
+      "displayName": "Ninja developer build with coverage for ${hostSystemName}",
+      "inherits": ["dev-coverage", "dev-Linux"]
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "dev",
+      "configurePreset": "dev",
+      "configuration": "Debug"
+    },
+    {
+      "name": "all",
+      "configurePreset": "dev",
+      "configuration": "Debug",
+      "targets": ["all", "format-fix"]
+    },
+    {
+      "name": "check",
+      "configurePreset": "dev",
+      "configuration": "Debug",
+      "targets": ["test", "run-exe", "install", "spell-check"]
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "dev",
+      "configurePreset": "dev",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error"
+      }
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "dev",
+      "displayName": "Ninja developer workflow with coverage for ${hostSystemName}",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "dev"
+        },
+        {
+          "type": "build",
+          "name": "all"
+        },
+        {
+          "type": "build",
+          "name": "check"
+        },
+        {
+          "type": "test",
+          "name": "dev"
+        }
+      ]
+    }
+  ]
+}
