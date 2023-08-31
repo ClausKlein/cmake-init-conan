@@ -1,0 +1,66 @@
+---
+image: docker.rsint.net/rs_common/rs-ubuntu:22.04-buildessential-2022-07-10
+
+# Configure pipeline workflow / execution accordingly:
+# - Tag pipelines always.
+# - Merge request pipelines when a merge request is open for the branch.
+# - Branch pipelines when a merge request is not open for the branch.
+# https://docs.gitlab.com/ee/ci/yaml/workflow.html#
+# switch-between-branch-pipelines-and-merge-request-pipelines
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
+variables:
+  # Required CPU's for execution in Kubernetes cluster
+  KUBERNETES_CPU_LIMIT: 2
+
+default:
+  before_script:
+    # The bootstrap of the container is still necessary due to used image
+    # After creation of a unit specific image, this should be obsolete
+    - echo -e "section_end:"`date +%s`":before_script\r\e[0Ksection_start:"`date +%s`":my_special_section\r\e[0KMy special section"
+    - export PATH="$HOME/.local/bin:$PATH"
+    - python3 util/bootstrap.py
+    - conan profile detect
+    - conan install . -s build_type=Debug -b missing
+    - echo -e "section_end:"`date +%s`":my_special_section\r\e[0Ksection_start:"`date +%s`":before_script\r\e[0K"
+  tags:
+    - linux-container
+
+build:
+  stage: build
+  # install the necessary build tools when needed
+  # before_script:
+  #   - apt update && apt -y install make autoconf
+  #   - python3 -m pip install --user --upgrade -r requirements.txt
+  script:
+    # - cmake --system-information
+    # - ls -l
+    - pwd & uname -a
+    - which cmake & cmake --version
+    - which ninja & ninja --version
+    - ln -sf .CMakeUserPresets.json CMakeUserPresets.json
+    - cmake --list-presets
+    - cmake --workflow --preset dev
+    - run-clang-tidy -p build/coverage
+    - gcovr .
+
+#clang-tidy:
+#  stage: test
+#  script:
+#    - run-clang-tidy -p build/coverage
+#
+#gcovr:
+#  stage: test
+#  script:
+#    - gcovr .
+#
+#deploy:
+#   stage: deploy
+#   script: echo "Define your deployment script!"
+#   environment: production
